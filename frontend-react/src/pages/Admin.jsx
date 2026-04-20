@@ -1,9 +1,9 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase, supabaseConfigured } from '../lib/supabase'
 import RecycleLogo from '../components/RecycleLogo'
 import './Admin.css'
 
-const ADMIN_EMAIL = 'admin@Tyajyadinda Tejassige.app'
+const ADMIN_EMAIL = 'admin@Smart Waste.app'
 
 export default function Admin() {
   const [authView, setAuthView] = useState('login')
@@ -164,7 +164,7 @@ export default function Admin() {
     <div className="adm-root">
       <div className="adm-auth">
         <div className="adm-auth-card">
-          <div className="adm-auth-logo"><RecycleLogo size={36}/><span>Tyajyadinda Tejassige</span></div>
+          <div className="adm-auth-logo"><RecycleLogo size={36}/><span>Smart Waste</span></div>
           <h2>{authView === 'login' ? 'Sign In' : 'Create Account'}</h2>
           <p className="adm-auth-sub">{authView === 'login' ? 'Vendor & Admin Portal' : 'Register as a vendor'}</p>
           {msg && <div className={'adm-msg ' + (msg.includes('Check') ? 'success' : 'error')}>{msg}</div>}
@@ -298,7 +298,7 @@ export default function Admin() {
                           <td>{c.vendors?.business_name}</td>
                           <td>{c.type}</td>
                           <td>{c.title}</td>
-                          <td>{c.budget_inr ? 'â‚¹' + c.budget_inr : 'â€”'}</td>
+                          <td>{c.budget_inr ? '₹' + c.budget_inr : '—'}</td>
                           <td><span className={'adm-status-badge ' + c.status}>{c.status}</span></td>
                         </tr>
                       ))}
@@ -323,7 +323,7 @@ export default function Admin() {
                           <td>{r.title}</td>
                           <td>{r.reward_type}</td>
                           <td>{r.points_required}</td>
-                          <td>{r.claimed_count}/{r.total_available || 'âˆž'}</td>
+                          <td>{r.claimed_count}/{r.total_available || '∞'}</td>
                           <td><span className={'adm-status-badge ' + r.status}>{r.status}</span></td>
                         </tr>
                       ))}
@@ -338,7 +338,7 @@ export default function Admin() {
             <div>
               <h2>My Store</h2>
               {myVendor.status === 'pending' && <div className="adm-notice">Your application is under review. You will be notified once approved.</div>}
-              {myVendor.status === 'rejected' && <div className="adm-notice error">Your application was rejected. Contact admin@Tyajyadinda Tejassige.app for details.</div>}
+              {myVendor.status === 'rejected' && <div className="adm-notice error">Your application was rejected. Contact admin@Smart Waste.app for details.</div>}
               <div className="adm-store-overview">
                 <h3>{myVendor.business_name}</h3>
                 <p>{myVendor.description}</p>
@@ -367,8 +367,8 @@ export default function Admin() {
                       </div>
                       <div className="adm-field"><label>Description</label><textarea value={productForm.description} onChange={e => setProductForm({...productForm, description: e.target.value})} rows={2} placeholder="Describe your product..."/></div>
                       <div className="adm-field-row">
-                        <div className="adm-field"><label>Price (â‚¹) *</label><input type="number" value={productForm.price} onChange={e => setProductForm({...productForm, price: e.target.value})} placeholder="299"/></div>
-                        <div className="adm-field"><label>Original Price (â‚¹)</label><input type="number" value={productForm.original_price} onChange={e => setProductForm({...productForm, original_price: e.target.value})} placeholder="399"/></div>
+                        <div className="adm-field"><label>Price (₹) *</label><input type="number" value={productForm.price} onChange={e => setProductForm({...productForm, price: e.target.value})} placeholder="299"/></div>
+                        <div className="adm-field"><label>Original Price (₹)</label><input type="number" value={productForm.original_price} onChange={e => setProductForm({...productForm, original_price: e.target.value})} placeholder="399"/></div>
                         <div className="adm-field"><label>Stock</label><input type="number" value={productForm.stock_quantity} onChange={e => setProductForm({...productForm, stock_quantity: e.target.value})} placeholder="50"/></div>
                       </div>
                       <div className="adm-field-row">
@@ -377,7 +377,7 @@ export default function Admin() {
                             <option value="piece">Piece</option><option value="kg">kg</option><option value="litre">Litre</option><option value="pack">Pack</option>
                           </select>
                         </div>
-                        <div className="adm-field"><label>COâ‚‚ Saved (kg)</label><input type="number" value={productForm.carbon_saved_kg} onChange={e => setProductForm({...productForm, carbon_saved_kg: e.target.value})} placeholder="0.5"/></div>
+                        <div className="adm-field"><label>CO₂ Saved (kg)</label><input type="number" value={productForm.carbon_saved_kg} onChange={e => setProductForm({...productForm, carbon_saved_kg: e.target.value})} placeholder="0.5"/></div>
                       </div>
                       <div className="adm-field"><label>Image URLs (comma separated)</label><input value={productForm.images} onChange={e => setProductForm({...productForm, images: e.target.value})} placeholder="https://..."/></div>
                       <label className="adm-check"><input type="checkbox" checked={productForm.eco_certified} onChange={e => setProductForm({...productForm, eco_certified: e.target.checked})}/> Eco Certified</label>
@@ -394,8 +394,8 @@ export default function Admin() {
                           <tbody>
                             {products.map(p => (
                               <tr key={p.id}>
-                                <td><strong>{p.name}</strong>{p.eco_certified && <span className="adm-eco-tag"> ðŸŒ¿</span>}</td>
-                                <td>â‚¹{p.price}</td>
+                                <td><strong>{p.name}</strong>{p.eco_certified && <span className="adm-eco-tag"> 🌿</span>}</td>
+                                <td>₹{p.price}</td>
                                 <td>{p.stock_quantity}</td>
                                 <td>{p.views || 0}</td>
                                 <td><button className="adm-reject-btn" onClick={() => deleteProduct(p.id)}>Delete</button></td>
@@ -444,7 +444,7 @@ export default function Admin() {
           {role === 'vendor' && activeTab === 'collabs_req' && (
             <div>
               <h2>Collaboration Requests</h2>
-              <p className="adm-empty">To feature your brand in Tyajyadinda Tejassige Tips, Community challenges, or as a reward sponsor, contact <strong>admin@Tyajyadinda Tejassige.app</strong>.</p>
+              <p className="adm-empty">To feature your brand in Smart Waste Tips, Community challenges, or as a reward sponsor, contact <strong>admin@Smart Waste.app</strong>.</p>
             </div>
           )}
         </div>

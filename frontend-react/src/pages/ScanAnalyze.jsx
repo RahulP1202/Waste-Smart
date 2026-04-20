@@ -1,4 +1,4 @@
-﻿import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import RecycleLogo from '../components/RecycleLogo'
@@ -317,7 +317,7 @@ export default function ScanAnalyze() {
         try {
           const { data: authData } = await supabase.auth.getUser()
           const userId = authData?.user?.id
-          console.log('Saving history — userId:', userId, 'items:', data.items?.length)
+          console.log('Saving history � userId:', userId, 'items:', data.items?.length)
           if (userId && data.items) {
             for (const item of data.items) {
               const { error } = await supabase.from('scan_history').insert({
@@ -342,13 +342,13 @@ export default function ScanAnalyze() {
               else console.log('History saved OK for:', item.waste_subtype)
             }
           } else {
-            console.log('No userId or no items — not saving. userId:', userId)
+            console.log('No userId or no items � not saving. userId:', userId)
           }
         } catch (e) {
           console.error('History save exception:', e)
         }
       } else {
-        console.log('Supabase not configured — history not saved')
+        console.log('Supabase not configured � history not saved')
       }
     } catch (e) { alert('Analysis failed: ' + e.message) }
     finally { setLoading(false) }
@@ -380,7 +380,7 @@ export default function ScanAnalyze() {
           </svg>
           {t('back')}
         </button>
-        <div className="scan-topbar-brand"><RecycleLogo size={22}/><span>Tyajyadinda Tejassige</span></div>
+        <div className="scan-topbar-brand"><RecycleLogo size={22}/><span>Smart Waste</span></div>
         {points > 0 && <div className="scan-points">+{points} {t('points_earned')}</div>}
       </div>
       <div className="scan-layout">
@@ -511,7 +511,7 @@ export default function ScanAnalyze() {
                       <p className="carbon-save-msg">{t('carbon_impact_msg').replace('{x}', item.carbon_saved_if_recycled_kg || 0)}</p>
                     </div>
                   </div>
-                  {/* Upcycle Ideas Generator — prominent card */}
+                  {/* Upcycle Ideas Generator � prominent card */}
                   <div className="upcycle-card">
                     <div className="upcycle-header">
                       <div className="upcycle-header-left">
@@ -521,15 +521,15 @@ export default function ScanAnalyze() {
                           </svg>
                         </div>
                         <div>
-                          <h4>{lang === 'kn' ? 'ಮರುಬಳಕೆ ಆಲೋಚನೆ ಜನರೇಟರ್' : 'Upcycle Ideas Generator'}</h4>
-                          <p>{lang === 'kn' ? `ಈ ${item.waste_subtype} ನಿಂದ ನೀವು ಇವುಗಳನ್ನು ತಯಾರಿಸಬಹುದು` : `Here's what you can make from this ${item.waste_subtype}`}</p>
+                          <h4>{lang === 'kn' ? '??????? ?????? ???????' : 'Upcycle Ideas Generator'}</h4>
+                          <p>{lang === 'kn' ? `? ${item.waste_subtype} ???? ???? ????????? ???????????` : `Here's what you can make from this ${item.waste_subtype}`}</p>
                         </div>
                       </div>
-                      <span className="upcycle-badge">{lang === 'kn' ? 'AI ಆಲೋಚನೆಗಳು' : 'AI Ideas'}</span>
+                      <span className="upcycle-badge">{lang === 'kn' ? 'AI ?????????' : 'AI Ideas'}</span>
                     </div>
                     <div className="upcycle-ideas">
                       {((item.diy_ideas && (item.diy_ideas[lang] || item.diy_ideas.en)) || []).map(function(idea, i) {
-                        const icons = ['🪴','🎨','🧺','💡','🛠️']
+                        const icons = ['??','??','??','??','???']
                         const colors = ['#10b981','#6366f1','#f59e0b','#3b82f6','#8b5cf6']
                         return (
                           <div key={i} className="upcycle-idea-item" style={{ borderLeft: '3px solid ' + colors[i % colors.length] }}>
@@ -545,7 +545,7 @@ export default function ScanAnalyze() {
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                       </svg>
-                      {lang === 'kn' ? 'ವಿಲೇವಾರಿ ಮಾಡುವ ಮೊದಲು ಮರುಬಳಕೆ ಪರಿಗಣಿಸಿ — ಪ್ರತಿ ಮರುಬಳಕೆ ಒಂದು ಮರ ಉಳಿಸುತ್ತದೆ' : 'Consider upcycling before disposal — every reuse saves resources'}
+                      {lang === 'kn' ? '???????? ????? ????? ??????? ???????? � ????? ??????? ???? ?? ??????????' : 'Consider upcycling before disposal � every reuse saves resources'}
                     </div>
                   </div>
                   <div className="eco-card">

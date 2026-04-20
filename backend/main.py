@@ -1,5 +1,5 @@
-﻿"""
-Tyajyadinda Tejassige â€” FastAPI Backend
+"""
+Smart Waste — FastAPI Backend
 """
 import os
 import json
@@ -16,7 +16,7 @@ load_dotenv()
 
 from waste_analyzer import analyze_waste, DISTRICTS
 
-app = FastAPI(title="Tyajyadinda Tejassige API", version="2.0.0")
+app = FastAPI(title="Smart Waste API", version="2.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/api/health")
 async def health():
-    return {"status": "ok", "service": "Tyajyadinda Tejassige"}
+    return {"status": "ok", "service": "Smart Waste"}
 
 
 @app.post("/api/analyze")
@@ -72,7 +72,7 @@ async def chat(req: ChatRequest):
 
     is_kannada = req.language == "kn"
 
-    # Detect if user message contains Kannada script (Unicode range à²…-à³ž)
+    # Detect if user message contains Kannada script (Unicode range ಅ-ೞ)
     last_user_msg = ""
     for m in reversed(req.messages):
         if m.role == "user":
@@ -82,24 +82,24 @@ async def chat(req: ChatRequest):
     use_kannada = is_kannada or has_kannada_script
 
     if use_kannada:
-        lang_instruction = """CRITICAL INSTRUCTION: You MUST respond ONLY in Kannada (à²•à²¨à³à²¨à²¡) language.
+        lang_instruction = """CRITICAL INSTRUCTION: You MUST respond ONLY in Kannada (ಕನ್ನಡ) language.
 Do NOT use English at all in your response.
-Write everything in Kannada script (à²•à²¨à³à²¨à²¡ à²²à²¿à²ªà²¿).
+Write everything in Kannada script (ಕನ್ನಡ ಲಿಪಿ).
 Use simple, clear, everyday Kannada that anyone can understand.
 If you don't know a technical term in Kannada, use the Kannada transliteration."""
     else:
         lang_instruction = "Respond in clear, simple English."
 
-    system_prompt = f"""You are SmartWaste Assistant (SmartWaste à²¸à²¹à²¾à²¯à²•), an expert AI for waste management, recycling, composting, and environmental sustainability in Karnataka, India.
+    system_prompt = f"""You are SmartWaste Assistant (SmartWaste ಸಹಾಯಕ), an expert AI for waste management, recycling, composting, and environmental sustainability in Karnataka, India.
 
 {lang_instruction}
 
 Your expertise includes:
 - Identifying waste types from descriptions or images
-- Disposal methods: wet bin (à²¹à²¸à²¿ à²¤à³à²¯à²¾à²œà³à²¯), dry bin (à²’à²£ à²¤à³à²¯à²¾à²œà³à²¯), hazardous bin (à²…à²ªà²¾à²¯à²•à²¾à²°à²¿ à²¤à³à²¯à²¾à²œà³à²¯)
+- Disposal methods: wet bin (ಹಸಿ ತ್ಯಾಜ್ಯ), dry bin (ಒಣ ತ್ಯಾಜ್ಯ), hazardous bin (ಅಪಾಯಕಾರಿ ತ್ಯಾಜ್ಯ)
 - DIY upcycling and reuse ideas
 - Carbon footprint impact of waste
-- Composting at home (à²®à²¨à³†à²¯à²²à³à²²à²¿ à²•à²¾à²‚à²ªà³‹à²¸à³à²Ÿà²¿à²‚à²—à³)
+- Composting at home (ಮನೆಯಲ್ಲಿ ಕಾಂಪೋಸ್ಟಿಂಗ್)
 - Where to dispose specific waste in Karnataka (BBMP, KSPCB collection centers)
 - Environmental impact education
 
@@ -108,7 +108,7 @@ Be concise, helpful, and practical. Give actionable advice."""
     # Image + text: use Groq vision first, then Gemini fallback
     if req.image_base64:
         image_bytes_decoded = base64.b64decode(req.image_base64)
-        last_msg = last_user_msg or ("à²ˆ à²šà²¿à²¤à³à²°à²µà²¨à³à²¨à³ à²µà²¿à²¶à³à²²à³‡à²·à²¿à²¸à²¿" if use_kannada else "Analyze this image")
+        last_msg = last_user_msg or ("ಈ ಚಿತ್ರವನ್ನು ವಿಶ್ಲೇಷಿಸಿ" if use_kannada else "Analyze this image")
 
         if groq_key:
             try:
@@ -181,8 +181,8 @@ Be concise, helpful, and practical. Give actionable advice."""
 
     # Demo fallback
     demo = {
-        "en": "I'm Tyajyadinda Tejassige Assistant. Please add GROQ_API_KEY to the backend .env file to enable real AI chat.",
-        "kn": "à²¨à²¾à²¨à³ SmartWaste à²¸à²¹à²¾à²¯à²•. à²¨à²¿à²œà²µà²¾à²¦ AI à²šà²¾à²Ÿà³ à²¸à²•à³à²°à²¿à²¯à²—à³Šà²³à²¿à²¸à²²à³ à²¬à³à²¯à²¾à²•à³†à²‚à²¡à³ .env à²«à³ˆà²²à³â€Œà²—à³† GROQ_API_KEY à²¸à³‡à²°à²¿à²¸à²¿."
+        "en": "I'm Smart Waste Assistant. Please add GROQ_API_KEY to the backend .env file to enable real AI chat.",
+        "kn": "ನಾನು SmartWaste ಸಹಾಯಕ. ನಿಜವಾದ AI ಚಾಟ್ ಸಕ್ರಿಯಗೊಳಿಸಲು ಬ್ಯಾಕೆಂಡ್ .env ಫೈಲ್‌ಗೆ GROQ_API_KEY ಸೇರಿಸಿ."
     }
     return {"reply": demo.get(req.language, demo["en"])}
 
@@ -217,12 +217,12 @@ Your tasks:
 4. Determine the correct waste disposal bin.
 
 DISPOSAL RULES:
-- Plastic bottles, wrappers, containers â†’ dry bin (recyclable)
-- Glass bottles/jars â†’ dry bin (recyclable)
-- Metal cans, aluminium â†’ dry bin (recyclable)
-- Food waste, organic â†’ wet bin
-- Batteries, electronics, chemicals, medicines â†’ hazardous bin
-- Mixed/contaminated packaging â†’ dry bin
+- Plastic bottles, wrappers, containers → dry bin (recyclable)
+- Glass bottles/jars → dry bin (recyclable)
+- Metal cans, aluminium → dry bin (recyclable)
+- Food waste, organic → wet bin
+- Batteries, electronics, chemicals, medicines → hazardous bin
+- Mixed/contaminated packaging → dry bin
 
 Return ONLY valid JSON, no markdown, no explanation:
 {{
@@ -232,19 +232,19 @@ Return ONLY valid JSON, no markdown, no explanation:
   "packaging_materials": ["Primary material", "Secondary material if any"],
   "waste_category": "Plastic|Glass|Metal|Paper|Organic|Mixed|E-Waste|Hazardous",
   "bin": "dry|wet|hazardous",
-  "bin_label": {{"en": "Dry Waste", "kn": "à²’à²£ à²¤à³à²¯à²¾à²œà³à²¯"}},
+  "bin_label": {{"en": "Dry Waste", "kn": "ಒಣ ತ್ಯಾಜ್ಯ"}},
   "recyclable": true,
   "disposal_steps": {{
     "en": ["Remove cap and rinse", "Crush to save space", "Place in blue/dry bin"],
-    "kn": ["à²®à³à²šà³à²šà²³ à²¤à³†à²—à³†à²¦à³ à²¤à³Šà²³à³†à²¯à²¿à²°à²¿", "à²œà²¾à²— à²‰à²³à²¿à²¸à²²à³ à²¹à²¿à²¸à³à²•à²¿", "à²¨à³€à²²à²¿/à²’à²£ à²¬à²¿à²¨à³â€Œà²¨à²²à³à²²à²¿ à²¹à²¾à²•à²¿"]
+    "kn": ["ಮುಚ್ಚಳ ತೆಗೆದು ತೊಳೆಯಿರಿ", "ಜಾಗ ಉಳಿಸಲು ಹಿಸುಕಿ", "ನೀಲಿ/ಒಣ ಬಿನ್‌ನಲ್ಲಿ ಹಾಕಿ"]
   }},
   "environmental_impact": {{
     "en": "Specific environmental impact of this product's packaging",
-    "kn": "à²ˆ à²‰à²¤à³à²ªà²¨à³à²¨à²¦ à²ªà³à²¯à²¾à²•à³‡à²œà²¿à²‚à²—à³â€Œà²¨ à²¨à²¿à²°à³à²¦à²¿à²·à³à²Ÿ à²ªà²°à²¿à²¸à²° à²ªà³à²°à²­à²¾à²µ"
+    "kn": "ಈ ಉತ್ಪನ್ನದ ಪ್ಯಾಕೇಜಿಂಗ್‌ನ ನಿರ್ದಿಷ್ಟ ಪರಿಸರ ಪ್ರಭಾವ"
   }},
   "eco_tips": {{
     "en": ["Specific tip for this product type", "Another actionable tip"],
-    "kn": ["à²ˆ à²‰à²¤à³à²ªà²¨à³à²¨ à²µà²¿à²§à²•à³à²•à³† à²¨à²¿à²°à³à²¦à²¿à²·à³à²Ÿ à²¸à²²à²¹à³†", "à²‡à²¨à³à²¨à³Šà²‚à²¦à³ à²•à³à²°à²¿à²¯à²¾à²¶à³€à²² à²¸à²²à²¹à³†"]
+    "kn": ["ಈ ಉತ್ಪನ್ನ ವಿಧಕ್ಕೆ ನಿರ್ದಿಷ್ಟ ಸಲಹೆ", "ಇನ್ನೊಂದು ಕ್ರಿಯಾಶೀಲ ಸಲಹೆ"]
   }},
   "carbon_footprint_kg": 0.15,
   "decomposition_time": "450 years"
@@ -301,7 +301,7 @@ Return ONLY valid JSON, no markdown, no explanation:
         except Exception as e:
             print(f"Barcode vision error: {e}")
 
-    # Text barcode lookup â€” use Open Food Facts API first, then Groq for analysis
+    # Text barcode lookup — use Open Food Facts API first, then Groq for analysis
     if req.barcode and (groq_key or gemini_key):
         try:
             import httpx
@@ -406,9 +406,9 @@ Provide accurate waste disposal guidance for this product. Return ONLY valid JSO
                 raw = json.loads(reply_text)
 
                 bin_labels = {
-                    "wet": {"en": "Wet Waste", "kn": "à²¹à²¸à²¿ à²¤à³à²¯à²¾à²œà³à²¯"},
-                    "dry": {"en": "Dry Waste", "kn": "à²’à²£ à²¤à³à²¯à²¾à²œà³à²¯"},
-                    "hazardous": {"en": "Hazardous Waste", "kn": "à²…à²ªà²¾à²¯à²•à²¾à²°à²¿ à²¤à³à²¯à²¾à²œà³à²¯"}
+                    "wet": {"en": "Wet Waste", "kn": "ಹಸಿ ತ್ಯಾಜ್ಯ"},
+                    "dry": {"en": "Dry Waste", "kn": "ಒಣ ತ್ಯಾಜ್ಯ"},
+                    "hazardous": {"en": "Hazardous Waste", "kn": "ಅಪಾಯಕಾರಿ ತ್ಯಾಜ್ಯ"}
                 }
                 bin_val = raw.get("bin", "dry")
                 steps_en = raw.get("disposal_steps_en", ["Dispose in appropriate bin"])
@@ -442,19 +442,19 @@ Provide accurate waste disposal guidance for this product. Return ONLY valid JSO
         "packaging_materials": ["Unknown"],
         "waste_category": "Mixed",
         "bin": "dry",
-        "bin_label": {"en": "Dry Waste", "kn": "à²’à²£ à²¤à³à²¯à²¾à²œà³à²¯"},
+        "bin_label": {"en": "Dry Waste", "kn": "ಒಣ ತ್ಯಾಜ್ಯ"},
         "recyclable": True,
         "disposal_steps": {
             "en": ["Check the product label for material type", "Clean the packaging", "Place in appropriate bin based on material"],
-            "kn": ["à²µà²¸à³à²¤à³ à²µà²¿à²§à²•à³à²•à²¾à²—à²¿ à²‰à²¤à³à²ªà²¨à³à²¨ à²²à³‡à²¬à²²à³ à²ªà²°à²¿à²¶à³€à²²à²¿à²¸à²¿", "à²ªà³à²¯à²¾à²•à³‡à²œà²¿à²‚à²—à³ à²¸à³à²µà²šà³à²› à²®à²¾à²¡à²¿", "à²µà²¸à³à²¤à³à²µà²¿à²¨ à²†à²§à²¾à²°à²¦ à²®à³‡à²²à³† à²¸à³‚à²•à³à²¤ à²¬à²¿à²¨à³â€Œà²¨à²²à³à²²à²¿ à²¹à²¾à²•à²¿"]
+            "kn": ["ವಸ್ತು ವಿಧಕ್ಕಾಗಿ ಉತ್ಪನ್ನ ಲೇಬಲ್ ಪರಿಶೀಲಿಸಿ", "ಪ್ಯಾಕೇಜಿಂಗ್ ಸ್ವಚ್ಛ ಮಾಡಿ", "ವಸ್ತುವಿನ ಆಧಾರದ ಮೇಲೆ ಸೂಕ್ತ ಬಿನ್‌ನಲ್ಲಿ ಹಾಕಿ"]
         },
         "environmental_impact": {
             "en": "Please upload a clearer image of the barcode or enter the barcode number manually for accurate identification.",
-            "kn": "à²¨à²¿à²–à²° à²—à³à²°à³à²¤à²¿à²¸à²²à³ à²¬à²¾à²°à³â€Œà²•à³‹à²¡à³â€Œà²¨ à²¸à³à²ªà²·à³à²Ÿ à²šà²¿à²¤à³à²° à²…à²ªà³â€Œà²²à³‹à²¡à³ à²®à²¾à²¡à²¿ à²…à²¥à²µà²¾ à²¬à²¾à²°à³â€Œà²•à³‹à²¡à³ à²¸à²‚à²–à³à²¯à³† à²¨à²®à³‚à²¦à²¿à²¸à²¿."
+            "kn": "ನಿಖರ ಗುರುತಿಸಲು ಬಾರ್‌ಕೋಡ್‌ನ ಸ್ಪಷ್ಟ ಚಿತ್ರ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ಅಥವಾ ಬಾರ್‌ಕೋಡ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ."
         },
         "eco_tips": {
             "en": ["Always check product labels for recycling symbols", "When in doubt, place in dry waste bin"],
-            "kn": ["à²¯à²¾à²µà²¾à²—à²²à³‚ à²®à²°à³à²¬à²³à²•à³† à²šà²¿à²¹à³à²¨à³†à²—à²³à²¿à²—à²¾à²—à²¿ à²‰à²¤à³à²ªà²¨à³à²¨ à²²à³‡à²¬à²²à³ à²ªà²°à²¿à²¶à³€à²²à²¿à²¸à²¿", "à²¸à²‚à²¦à³‡à²¹à²µà²¿à²¦à³à²¦à²¾à²— à²’à²£ à²¤à³à²¯à²¾à²œà³à²¯ à²¬à²¿à²¨à³â€Œà²¨à²²à³à²²à²¿ à²¹à²¾à²•à²¿"]
+            "kn": ["ಯಾವಾಗಲೂ ಮರುಬಳಕೆ ಚಿಹ್ನೆಗಳಿಗಾಗಿ ಉತ್ಪನ್ನ ಲೇಬಲ್ ಪರಿಶೀಲಿಸಿ", "ಸಂದೇಹವಿದ್ದಾಗ ಒಣ ತ್ಯಾಜ್ಯ ಬಿನ್‌ನಲ್ಲಿ ಹಾಕಿ"]
         },
         "carbon_footprint_kg": 0.1,
         "decomposition_time": "Varies by material",
