@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
+ï»¿import { useState, useRef, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import RecycleLogo from '../components/RecycleLogo'
@@ -317,7 +317,7 @@ export default function ScanAnalyze() {
         try {
           const { data: authData } = await supabase.auth.getUser()
           const userId = authData?.user?.id
-          console.log('Saving history — userId:', userId, 'items:', data.items?.length)
+          console.log('Saving history ï¿½ userId:', userId, 'items:', data.items?.length)
           if (userId && data.items) {
             for (const item of data.items) {
               const { error } = await supabase.from('scan_history').insert({
@@ -342,13 +342,13 @@ export default function ScanAnalyze() {
               else console.log('History saved OK for:', item.waste_subtype)
             }
           } else {
-            console.log('No userId or no items — not saving. userId:', userId)
+            console.log('No userId or no items ï¿½ not saving. userId:', userId)
           }
         } catch (e) {
           console.error('History save exception:', e)
         }
       } else {
-        console.log('Supabase not configured — history not saved')
+        console.log('Supabase not configured ï¿½ history not saved')
       }
     } catch (e) { alert('Analysis failed: ' + e.message) }
     finally { setLoading(false) }
@@ -511,7 +511,7 @@ export default function ScanAnalyze() {
                       <p className="carbon-save-msg">{t('carbon_impact_msg').replace('{x}', item.carbon_saved_if_recycled_kg || 0)}</p>
                     </div>
                   </div>
-                  {/* Upcycle Ideas Generator — prominent card */}
+                  {/* Upcycle Ideas Generator ï¿½ prominent card */}
                   <div className="upcycle-card">
                     <div className="upcycle-header">
                       <div className="upcycle-header-left">
@@ -545,7 +545,7 @@ export default function ScanAnalyze() {
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                       </svg>
-                      {lang === 'kn' ? '???????? ????? ????? ??????? ???????? — ????? ??????? ???? ?? ??????????' : 'Consider upcycling before disposal — every reuse saves resources'}
+                      {lang === 'kn' ? '???????? ????? ????? ??????? ???????? ï¿½ ????? ??????? ???? ?? ??????????' : 'Consider upcycling before disposal ï¿½ every reuse saves resources'}
                     </div>
                   </div>
                   <div className="eco-card">

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Smart Waste — FastAPI Backend
 """
 import os

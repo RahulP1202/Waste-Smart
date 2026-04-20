@@ -1,5 +1,6 @@
-﻿"""
-Tyajyadinda Tejassige Analyzer â€” Groq Vision (llama-4-scout) for image analysis.
+﻿# -*- coding: utf-8 -*-
+"""
+Smart Waste Analyzer - Groq Vision for image analysis.
 """
 import os
 import json
@@ -18,69 +19,54 @@ with open(DATA_DIR / "districts.json", "r", encoding="utf-8") as f:
 DISTRICT_MAP = {d["id"]: d for d in DISTRICTS}
 
 ANALYSIS_PROMPT = """You are an expert waste identification and environmental impact analyst for Karnataka, India.
-
-Look at this image carefully and identify EVERYTHING visible that could be classified as waste or has disposal implications.
-
-IMPORTANT: You can analyze ANY type of image:
-- Food items (fruits, vegetables, cooked food, peels, shells) â†’ organic/wet waste
-- Packaging (bottles, cans, wrappers, boxes, bags) â†’ dry/recyclable waste
-- Electronics, batteries, cables â†’ e-waste/hazardous
-- Household items, clothing, furniture â†’ dry waste
-- Chemicals, medicines, syringes â†’ hazardous
-- Mixed scenes (kitchen, room, outdoor) â†’ identify each item separately
-- If the image shows a person, animal, or landscape with no waste â†’ still identify any waste-related items visible
-
-STRICT RULES:
-- Identify ONLY what you actually see. Do NOT invent items.
-- Be specific: not just "plastic" but "PET plastic bottle" or "HDPE container"
-- Organic food items (vegetables, fruits, peels, shells, cooked food, leftovers) = wet bin
+Look at this image and identify waste items visible.
+RULES:
+- Organic food items = wet bin
 - Plastic, paper, metal, glass, cloth, cardboard = dry bin
-- Batteries, electronics, chemicals, syringes, medicines = hazardous bin
-- If you see a non-waste image (person, landscape, animal only), return 1 item describing what you see and suggest "dry" bin as default
-
+- Batteries, electronics, chemicals, medicines = hazardous bin
 Return ONLY valid JSON, no markdown:
 {
   "items": [
     {
       "waste_type": "Organic|Plastic|Metal|Glass|Paper|Cloth|E-Waste|Rubber|Medical|Sanitary|Ceramic|Wood|Mixed",
-      "waste_subtype": "Exact specific name (e.g. Egg Shell, Carrot, PET Water Bottle, Cardboard Box, AA Battery)",
+      "waste_subtype": "Exact specific name",
       "bin": "wet|dry|hazardous",
-      "bin_label": {"en": "Wet Waste", "kn": "à²¹à²¸à²¿ à²¤à³à²¯à²¾à²œà³à²¯"},
-      "decomposition_time": "realistic time (e.g. 2-4 weeks, 450 years)",
+      "bin_label": {"en": "Wet Waste", "kn": "\u0cb9\u0cb8\u0cbf \u0ca4\u0ccd\u0caf\u0cbe\u0c9c\u0ccd\u0caf"},
+      "decomposition_time": "realistic time",
       "recyclability": 3,
       "compostable": true,
       "reuse_potential": 2,
       "can_sell": false,
       "sell_price": "",
       "disposal_steps": {
-        "en": ["Specific step for this exact item", "Step 2", "Step 3"],
-        "kn": ["à²ˆ à²µà²¸à³à²¤à³à²µà²¿à²—à³† à²¨à²¿à²°à³à²¦à²¿à²·à³à²Ÿ à²¹à²‚à²¤", "à²¹à²‚à²¤ 2", "à²¹à²‚à²¤ 3"]
+        "en": ["Step 1", "Step 2", "Step 3"],
+        "kn": ["\u0cb9\u0c82\u0ca4 1", "\u0cb9\u0c82\u0ca4 2", "\u0cb9\u0c82\u0ca4 3"]
       },
       "where_to_dispose": {
-        "en": "Specific disposal location in Karnataka (e.g. BBMP green bin, dry waste collection center, e-waste drop-off)",
-        "kn": "à²•à²°à³à²¨à²¾à²Ÿà²•à²¦à²²à³à²²à²¿ à²¨à²¿à²°à³à²¦à²¿à²·à³à²Ÿ à²µà²¿à²²à³‡à²µà²¾à²°à²¿ à²¸à³à²¥à²³"
+        "en": "Specific disposal location in Karnataka",
+        "kn": "\u0c95\u0cb0\u0ccd\u0ca8\u0cbe\u0c9f\u0c95\u0ca6\u0cb2\u0ccd\u0cb2\u0cbf \u0cb5\u0cbf\u0cb2\u0cc7\u0cb5\u0cbe\u0cb0\u0cbf \u0cb8\u0ccd\u0ca5\u0cb3"
       },
       "diy_ideas": {
-        "en": ["Creative reuse idea specific to this item", "Another practical DIY idea"],
-        "kn": ["à²ˆ à²µà²¸à³à²¤à³à²µà²¿à²—à³† à²¨à²¿à²°à³à²¦à²¿à²·à³à²Ÿ à²®à²°à³à²¬à²³à²•à³† à²†à²²à³‹à²šà²¨à³†", "à²‡à²¨à³à²¨à³Šà²‚à²¦à³ à²ªà³à²°à²¾à²¯à³‹à²—à²¿à²• DIY à²†à²²à³‹à²šà²¨à³†"]
+        "en": ["Creative reuse idea", "Another DIY idea"],
+        "kn": ["\u0cae\u0cb0\u0cc1\u0cac\u0cb3\u0c95\u0cc6 \u0c86\u0cb2\u0ccb\u0c9a\u0ca8\u0cc6", "\u0c87\u0ca8\u0ccd\u0ca8\u0ccb\u0c82\u0ca6\u0cc1 DIY \u0c86\u0cb2\u0ccb\u0c9a\u0ca8\u0cc6"]
       },
       "carbon_footprint_kg": 0.05,
       "carbon_if_disposed_wrong_kg": 0.18,
       "carbon_saved_if_recycled_kg": 0.12,
       "description": {
-        "en": "Accurate description of this item, its material, and environmental impact",
-        "kn": "à²ˆ à²µà²¸à³à²¤à³, à²…à²¦à²° à²µà²¸à³à²¤à³ à²®à²¤à³à²¤à³ à²ªà²°à²¿à²¸à²° à²ªà³à²°à²­à²¾à²µà²¦ à²¨à²¿à²–à²° à²µà²¿à²µà²°à²£à³†"
+        "en": "Description of item and environmental impact",
+        "kn": "\u0cb5\u0cb8\u0ccd\u0ca4\u0cc1 \u0cae\u0ca4\u0ccd\u0ca4\u0cc1 \u0caa\u0cb0\u0cbf\u0cb8\u0cb0 \u0caa\u0ccd\u0cb0\u0cad\u0cbe\u0cb5\u0ca6 \u0cb5\u0cbf\u0cb5\u0cb0\u0ca3\u0cc6"
       }
     }
   ],
   "overall_summary": {
-    "en": "Brief accurate summary of what is in the image and the main disposal recommendation",
-    "kn": "à²šà²¿à²¤à³à²°à²¦à²²à³à²²à²¿ à²à²¨à²¿à²¦à³† à²®à²¤à³à²¤à³ à²®à³à²–à³à²¯ à²µà²¿à²²à³‡à²µà²¾à²°à²¿ à²¶à²¿à²«à²¾à²°à²¸à²¿à²¨ à²¸à²‚à²•à³à²·à²¿à²ªà³à²¤ à²¨à²¿à²–à²° à²¸à²¾à²°à²¾à²‚à²¶"
+    "en": "Summary of image and disposal recommendation",
+    "kn": "\u0c9a\u0cbf\u0ca4\u0ccd\u0cb0\u0ca6 \u0cb8\u0cbe\u0cb0\u0cbe\u0c82\u0cb6 \u0cae\u0ca4\u0ccd\u0ca4\u0cc1 \u0cb5\u0cbf\u0cb2\u0cc7\u0cb5\u0cbe\u0cb0\u0cbf \u0cb6\u0cbf\u0cab\u0cbe\u0cb0\u0cb8\u0cc1"
   },
   "total_carbon_footprint_kg": 0.05,
   "eco_tips": {
-    "en": ["Actionable tip specific to items found", "Tip 2", "Tip 3"],
-    "kn": ["à²•à²‚à²¡à³à²¬à²‚à²¦ à²µà²¸à³à²¤à³à²—à²³à²¿à²—à³† à²¨à²¿à²°à³à²¦à²¿à²·à³à²Ÿ à²•à³à²°à²¿à²¯à²¾à²¶à³€à²² à²¸à²²à²¹à³†", "à²¸à²²à²¹à³† 2", "à²¸à²²à²¹à³† 3"]
+    "en": ["Tip 1", "Tip 2", "Tip 3"],
+    "kn": ["\u0cb8\u0cb2\u0cb9\u0cc6 1", "\u0cb8\u0cb2\u0cb9\u0cc6 2", "\u0cb8\u0cb2\u0cb9\u0cc6 3"]
   }
 }"""
 
@@ -97,39 +83,25 @@ async def analyze_waste(image_bytes: bytes, mime_type: str, district_id: str, la
     groq_key = os.getenv("GROQ_API_KEY", "")
     gemini_key = os.getenv("GEMINI_API_KEY", "")
 
+    parsed = None
+    use_ai = False
+
     if groq_key:
         try:
             from groq import Groq
             client = Groq(api_key=groq_key)
-
-            # Encode image to base64
             image_b64 = base64.b64encode(image_bytes).decode("utf-8")
             data_url = f"data:{mime_type};base64,{image_b64}"
-
             response = client.chat.completions.create(
                 model="meta-llama/llama-4-scout-17b-16e-instruct",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "image_url",
-                                "image_url": {"url": data_url}
-                            },
-                            {
-                                "type": "text",
-                                "text": ANALYSIS_PROMPT
-                            }
-                        ]
-                    }
-                ],
+                messages=[{"role": "user", "content": [
+                    {"type": "image_url", "image_url": {"url": data_url}},
+                    {"type": "text", "text": ANALYSIS_PROMPT}
+                ]}],
                 max_tokens=4096,
                 temperature=0.1,
             )
-
             text = response.choices[0].message.content.strip()
-
-            # Strip markdown fences if present
             if "```" in text:
                 parts = text.split("```")
                 for part in parts:
@@ -139,23 +111,13 @@ async def analyze_waste(image_bytes: bytes, mime_type: str, district_id: str, la
                     if part.startswith("{"):
                         text = part
                         break
-
             parsed = json.loads(text)
             use_ai = True
-
         except json.JSONDecodeError as e:
             print(f"Groq JSON parse error: {e}. Trying Gemini fallback.")
-            parsed = None
-            use_ai = False
         except Exception as e:
             print(f"Groq vision error: {e}. Trying Gemini fallback.")
-            parsed = None
-            use_ai = False
-    else:
-        parsed = None
-        use_ai = False
 
-    # Gemini fallback if Groq failed or not configured
     if not parsed and gemini_key:
         try:
             from google import genai
@@ -182,16 +144,13 @@ async def analyze_waste(image_bytes: bytes, mime_type: str, district_id: str, la
             use_ai = True
         except Exception as e:
             print(f"Gemini vision error: {e}")
-            parsed = None
-            use_ai = False
 
     if not parsed:
-        # Demo fallback â€” single item
         cat = random.choice(WASTE_CATEGORIES)
         bin_labels = {
-            "wet": {"en": "Wet Waste", "kn": "à²¹à²¸à²¿ à²¤à³à²¯à²¾à²œà³à²¯"},
-            "dry": {"en": "Dry Waste", "kn": "à²’à²£ à²¤à³à²¯à²¾à²œà³à²¯"},
-            "hazardous": {"en": "Hazardous Waste", "kn": "à²…à²ªà²¾à²¯à²•à²¾à²°à²¿ à²¤à³à²¯à²¾à²œà³à²¯"},
+            "wet":       {"en": "Wet Waste",       "kn": "\u0cb9\u0cb8\u0cbf \u0ca4\u0ccd\u0caf\u0cbe\u0c9c\u0ccd\u0caf"},
+            "dry":       {"en": "Dry Waste",       "kn": "\u0c92\u0ca3 \u0ca4\u0ccd\u0caf\u0cbe\u0c9c\u0ccd\u0caf"},
+            "hazardous": {"en": "Hazardous Waste", "kn": "\u0c85\u0caa\u0cbe\u0caf\u0c95\u0cbe\u0cb0\u0cbf \u0ca4\u0ccd\u0caf\u0cbe\u0c9c\u0ccd\u0caf"},
         }
         carbon = round(random.uniform(0.05, 0.5), 3)
         item = {
@@ -207,34 +166,34 @@ async def analyze_waste(image_bytes: bytes, mime_type: str, district_id: str, la
             "sell_price": cat.get("sell_price", ""),
             "disposal_steps": {
                 "en": ["Separate from other waste", "Place in correct bin", "Hand over to collection"],
-                "kn": ["à²‡à²¤à²° à²¤à³à²¯à²¾à²œà³à²¯à²¦à²¿à²‚à²¦ à²¬à³‡à²°à³à²ªà²¡à²¿à²¸à²¿", "à²¸à²°à²¿à²¯à²¾à²¦ à²¬à²¿à²¨à³â€Œà²¨à²²à³à²²à²¿ à²¹à²¾à²•à²¿", "à²¸à²‚à²—à³à²°à²¹à²•à³à²•à³† à²’à²ªà³à²ªà²¿à²¸à²¿"]
+                "kn": ["\u0c87\u0ca4\u0cb0 \u0ca4\u0ccd\u0caf\u0cbe\u0c9c\u0ccd\u0caf\u0ca6\u0cbf\u0c82\u0ca6 \u0cac\u0cc7\u0cb0\u0ccd\u0caa\u0ca1\u0cbf\u0cb8\u0cbf", "\u0cb8\u0cb0\u0cbf\u0caf\u0cbe\u0ca6 \u0cac\u0cbf\u0ca8\u0ccd\u200c\u0ca8\u0cb2\u0ccd\u0cb2\u0cbf \u0cb9\u0cbe\u0c95\u0cbf", "\u0cb8\u0c82\u0c97\u0ccd\u0cb0\u0cb9\u0c95\u0ccd\u0c95\u0cc6 \u0c92\u0caa\u0ccd\u0caa\u0cbf\u0cb8\u0cbf"]
             },
             "where_to_dispose": {
                 "en": "Nearest BBMP collection center",
-                "kn": "à²¹à²¤à³à²¤à²¿à²°à²¦ BBMP à²¸à²‚à²—à³à²°à²¹ à²•à³‡à²‚à²¦à³à²°"
+                "kn": "\u0cb9\u0ca4\u0ccd\u0ca4\u0cbf\u0cb0\u0ca6 BBMP \u0cb8\u0c82\u0c97\u0ccd\u0cb0\u0cb9 \u0c95\u0cc7\u0c82\u0ca6\u0ccd\u0cb0"
             },
             "diy_ideas": {
                 "en": ["Repurpose creatively", "Use for home projects"],
-                "kn": ["à²¸à³ƒà²œà²¨à²¶à³€à²²à²µà²¾à²—à²¿ à²®à²°à³à²¬à²³à²¸à²¿", "à²®à²¨à³† à²¯à³‹à²œà²¨à³†à²—à²³à²¿à²—à³† à²¬à²³à²¸à²¿"]
+                "kn": ["\u0cb8\u0cc3\u0c9c\u0ca8\u0cb6\u0cc0\u0cb2\u0cb5\u0cbe\u0c97\u0cbf \u0cae\u0cb0\u0cc1\u0cac\u0cb3\u0cb8\u0cbf", "\u0cae\u0ca8\u0cc6 \u0caf\u0ccb\u0c9c\u0ca8\u0cc6\u0c97\u0cb3\u0cbf\u0c97\u0cc6 \u0cac\u0cb3\u0cb8\u0cbf"]
             },
             "carbon_footprint_kg": carbon,
             "carbon_if_disposed_wrong_kg": round(carbon * 3.2, 3),
             "carbon_saved_if_recycled_kg": round(carbon * 2.1, 3),
             "description": {
-                "en": f"Demo mode â€” add GROQ_API_KEY to enable real AI analysis.",
-                "kn": "à²¡à³†à²®à³Š à²®à³‹à²¡à³ â€” à²¨à²¿à²œà²µà²¾à²¦ AI à²µà²¿à²¶à³à²²à³‡à²·à²£à³†à²—à²¾à²—à²¿ GROQ_API_KEY à²¸à³‡à²°à²¿à²¸à²¿."
+                "en": "Demo mode - add GROQ_API_KEY to enable real AI analysis.",
+                "kn": "\u0ca1\u0cc6\u0cae\u0ccb \u0cae\u0ccb\u0ca1\u0ccd - \u0ca8\u0cbf\u0c9c\u0cb5\u0cbe\u0ca6 AI \u0cb5\u0cbf\u0cb6\u0ccd\u0cb2\u0cc7\u0cb7\u0ca3\u0cc6\u0c97\u0cbe\u0c97\u0cbf GROQ_API_KEY \u0cb8\u0cc7\u0cb0\u0cbf\u0cb8\u0cbf."
             }
         }
         parsed = {
             "items": [item],
             "overall_summary": {
-                "en": "Demo mode â€” showing sample result. Add GROQ_API_KEY for real analysis.",
-                "kn": "à²¡à³†à²®à³Š à²®à³‹à²¡à³ â€” à²®à²¾à²¦à²°à²¿ à²«à²²à²¿à²¤à²¾à²‚à²¶ à²¤à³‹à²°à²¿à²¸à²²à²¾à²—à³à²¤à³à²¤à²¿à²¦à³†."
+                "en": "Demo mode - showing sample result. Add GROQ_API_KEY for real analysis.",
+                "kn": "\u0ca1\u0cc6\u0cae\u0ccb \u0cae\u0ccb\u0ca1\u0ccd - \u0cae\u0cbe\u0ca6\u0cb0\u0cbf \u0cab\u0cb2\u0cbf\u0ca4\u0cbe\u0c82\u0cb6 \u0ca4\u0ccb\u0cb0\u0cbf\u0cb8\u0cb2\u0cbe\u0c97\u0cc1\u0ca4\u0ccd\u0ca4\u0cbf\u0ca6\u0cc6."
             },
             "total_carbon_footprint_kg": carbon,
             "eco_tips": {
                 "en": ["Separate waste at source", "Compost organic waste", "Recycle dry waste"],
-                "kn": ["à²®à³‚à²²à²¦à²²à³à²²à³‡ à²¤à³à²¯à²¾à²œà³à²¯ à²¬à³‡à²°à³à²ªà²¡à²¿à²¸à²¿", "à²¸à²¾à²µà²¯à²µ à²¤à³à²¯à²¾à²œà³à²¯ à²•à²¾à²‚à²ªà³‹à²¸à³à²Ÿà³ à²®à²¾à²¡à²¿", "à²’à²£ à²¤à³à²¯à²¾à²œà³à²¯ à²®à²°à³à²¬à²³à²•à³† à²®à²¾à²¡à²¿"]
+                "kn": ["\u0cae\u0cc2\u0cb2\u0ca6\u0cb2\u0ccd\u0cb2\u0cc7 \u0ca4\u0ccd\u0caf\u0cbe\u0c9c\u0ccd\u0caf \u0cac\u0cc7\u0cb0\u0ccd\u0caa\u0ca1\u0cbf\u0cb8\u0cbf", "\u0cb8\u0cbe\u0cb5\u0caf\u0cb5 \u0ca4\u0ccd\u0caf\u0cbe\u0c9c\u0ccd\u0caf \u0c95\u0cbe\u0c82\u0caa\u0ccb\u0cb8\u0ccd\u0c9f\u0ccd \u0cae\u0cbe\u0ca1\u0cbf", "\u0c92\u0ca3 \u0ca4\u0ccd\u0caf\u0cbe\u0c9c\u0ccd\u0caf \u0cae\u0cb0\u0cc1\u0cac\u0cb3\u0c95\u0cc6 \u0cae\u0cbe\u0ca1\u0cbf"]
             }
         }
 
@@ -251,4 +210,3 @@ async def analyze_waste(image_bytes: bytes, mime_type: str, district_id: str, la
     parsed["demo_mode"] = not use_ai
     parsed["points_earned"] = 10 * max(1, len(parsed.get("items", [])))
     return parsed
-
