@@ -460,4 +460,7 @@ Provide accurate waste disposal guidance for this product. Return ONLY valid JSO
         "decomposition_time": "Varies by material",
         "demo_mode": True
     }
+if __name__ == "__main__":
+    import uvicorn
 
+    uvicorn.run("main:app", host="127.0.0.1", port=int(os.getenv("PORT", "8000")), reload=True)
