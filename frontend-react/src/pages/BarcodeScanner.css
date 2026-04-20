@@ -1,0 +1,230 @@
+﻿.bc-root { min-height: 100vh; background: var(--bg); }
+
+.bc-topbar { display: flex; align-items: center; gap: 16px; padding: 13px 24px; background: var(--nav-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+.bc-topbar-brand { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; color: var(--text); flex: 1; justify-content: center; }
+.scan-back { display: flex; align-items: center; gap: 6px; background: none; color: var(--muted); font-size: 14px; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); transition: color 0.2s; }
+.scan-back:hover { color: var(--text); }
+
+.bc-container { max-width: 600px; margin: 0 auto; padding: 32px 20px 80px; }
+
+.bc-upload-panel { display: flex; flex-direction: column; gap: 20px; }
+
+.bc-hero { text-align: center; padding: 20px 0 8px; }
+.bc-hero h2 { font-size: 22px; font-weight: 800; color: var(--text); margin: 14px 0 8px; }
+.bc-hero p { font-size: 14px; color: var(--muted2); line-height: 1.6; max-width: 420px; margin: 0 auto; }
+
+.bc-input-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.bc-method-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 20px 16px; background: var(--card); border: 1px solid var(--border2); border-radius: 14px; color: var(--text); cursor: pointer; transition: all 0.2s; }
+.bc-method-btn:hover { border-color: #10b981; background: rgba(16,185,129,0.05); }
+.bc-method-btn span { font-size: 14px; font-weight: 600; }
+.bc-method-btn small { font-size: 12px; color: var(--muted2); }
+
+.bc-preview-wrap { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid rgba(16,185,129,0.3); }
+.bc-preview-img { width: 100%; max-height: 280px; object-fit: contain; display: block; background: var(--card); }
+.bc-remove { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.65); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.bc-detected { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: rgba(16,185,129,0.1); font-size: 13px; color: var(--text2); }
+
+.bc-manual label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.bc-manual-row { display: flex; gap: 8px; }
+.bc-manual-input { flex: 1; padding: 11px 14px; background: var(--card); border: 1px solid var(--border2); border-radius: 10px; color: var(--text); font-size: 14px; }
+.bc-manual-input:focus { border-color: #10b981; outline: none; }
+.bc-manual-input::placeholder { color: var(--muted2); }
+
+.bc-error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); color: #f87171; padding: 10px 14px; border-radius: 10px; font-size: 13px; }
+
+.bc-analyze-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; color: #fff; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; transition: opacity 0.2s; border: none; cursor: pointer; }
+.bc-analyze-btn.secondary { background: var(--card2); border: 1px solid var(--border2); color: var(--text); }
+.bc-analyze-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+.bc-analyze-btn:not(:disabled):hover { opacity: 0.88; }
+
+.spin-ring { width: 17px; height: 17px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; animation: spinR 0.7s linear infinite; display: inline-block; }
+@keyframes spinR { to { transform: rotate(360deg); } }
+
+.loading-overlay { position: fixed; inset: 0; background: rgba(28,31,38,0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 200; gap: 16px; }
+.spinner { display: flex; gap: 8px; }
+.spinner div { width: 12px; height: 12px; border-radius: 50%; background: #10b981; animation: bounce 0.8s ease-in-out infinite; }
+.spinner div:nth-child(2) { animation-delay: 0.15s; background: #6366f1; }
+.spinner div:nth-child(3) { animation-delay: 0.3s; background: #8b5cf6; }
+@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+.loading-overlay p { color: var(--text); font-size: 17px; font-weight: 600; }
+.loading-overlay span { color: var(--muted2); font-size: 14px; }
+
+/* Camera */
+.camera-overlay { position: fixed; inset: 0; background: #000; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.camera-feed { width: 100%; max-height: 80vh; object-fit: cover; }
+.bc-cam-guide { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.bc-cam-frame { width: 240px; height: 160px; border: 3px solid #10b981; border-radius: 12px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); margin: 0 auto 12px; }
+.bc-cam-guide p { color: #fff; font-size: 14px; }
+.camera-controls { position: absolute; bottom: 40px; display: flex; gap: 16px; }
+.cam-btn { padding: 12px 28px; border-radius: 12px; font-size: 15px; font-weight: 600; border: none; cursor: pointer; }
+.capture-btn { background: #10b981; color: #fff; }
+.close-btn { background: rgba(255,255,255,0.15); color: #fff; }
+
+/* ── Results ── */
+.bc-result { display: flex; flex-direction: column; gap: 16px; animation: fadeUp 0.4s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+.demo-badge { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: #f59e0b; padding: 10px 14px; border-radius: 10px; font-size: 13px; text-align: center; }
+
+/* ── Hero label card (product label aesthetic) ── */
+.bc-hero-card {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+.bc-hero-banner {
+  position: relative;
+  padding: 28px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  overflow: hidden;
+}
+.bc-hero-banner::before {
+  content: '';
+  position: absolute; inset: 0;
+  opacity: 0.12;
+  z-index: 0;
+  background: currentColor;
+}
+
+.bc-ribbon {
+  position: absolute;
+  top: 16px; left: -28px;
+  width: 120px;
+  padding: 5px 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #fff;
+  transform: rotate(-45deg);
+  z-index: 2;
+}
+
+.bc-product-img-frame {
+  position: relative; z-index: 1;
+  width: 110px; height: 110px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 3px solid rgba(255,255,255,0.18);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  background: var(--bg2);
+  flex-shrink: 0;
+}
+.bc-product-img-frame img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.bc-product-img-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0.3;
+}
+
+.bc-hero-info {
+  position: relative; z-index: 1;
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.bc-bin-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 14px; border-radius: 100px;
+  font-size: 11px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.8px;
+}
+.bc-product-name { font-size: 20px; font-weight: 900; color: var(--text); line-height: 1.2; }
+.bc-brand { font-size: 13px; color: var(--muted); }
+.bc-barcode-num { font-size: 11px; color: var(--muted2); font-family: monospace; letter-spacing: 1px; }
+
+.bc-recyclable-row {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 8px;
+}
+.bc-recyclable-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 700;
+}
+
+/* ── Materials ── */
+.bc-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px; }
+.bc-section-title {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px;
+}
+.bc-section-icon { opacity: 0.7; }
+.bc-materials { display: flex; flex-wrap: wrap; gap: 8px; }
+.bc-material-tag {
+  background: var(--bg2); border: 1px solid var(--border2);
+  color: var(--text2); padding: 5px 13px;
+  border-radius: 100px; font-size: 13px; font-weight: 500;
+}
+
+/* ── Stats bars (scorecard style) ── */
+.bc-stats-bars { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.bc-stat-bar-row { display: flex; flex-direction: column; gap: 6px; }
+.bc-stat-bar-header { display: flex; justify-content: space-between; align-items: center; }
+.bc-stat-bar-label { font-size: 12px; color: var(--muted); font-weight: 600; }
+.bc-stat-bar-value { font-size: 13px; font-weight: 800; color: var(--text); }
+.bc-stat-bar-track { height: 7px; background: var(--border2); border-radius: 4px; overflow: hidden; }
+.bc-stat-bar-fill { height: 100%; border-radius: 4px; transition: width 1s cubic-bezier(.2,.8,.2,1); }
+
+/* ── Info cards ── */
+.bc-info-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; }
+.bc-info-card-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+  padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.bc-info-card-icon {
+  width: 32px; height: 32px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.bc-info-card-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.bc-info-card p { font-size: 14px; color: var(--text2); line-height: 1.65; }
+
+/* Disposal steps — checklist style */
+.bc-steps { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.bc-steps li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; color: var(--text2); line-height: 1.5;
+}
+.bc-step-num {
+  width: 22px; height: 22px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; color: #fff;
+  flex-shrink: 0; margin-top: 1px;
+}
+
+/* Eco tips */
+.bc-tips { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.bc-tips li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; color: var(--text2); line-height: 1.5;
+  padding: 10px 12px;
+  background: var(--bg2); border-radius: 10px;
+  border-left: 3px solid #10b981;
+}
+.bc-tip-leaf { flex-shrink: 0; margin-top: 2px; color: #10b981; }
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+  .bc-container { padding: 20px 14px 80px; }
+  .bc-product-name { font-size: 17px; }
+  .bc-hero-banner { padding: 24px 16px 16px; }
+  .bc-product-img-frame { width: 90px; height: 90px; }
+}
+@media (max-width: 480px) {
+  .bc-input-methods { grid-template-columns: 1fr; }
+  .bc-hero-banner { padding: 20px 14px 14px; }
+}
+
+.bc-tip-box { display: flex; align-items: flex-start; gap: 8px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: #f59e0b; line-height: 1.5; margin-top: 12px; text-align: left; }

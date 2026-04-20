@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>WasteSmart Karnataka — AI Waste Classifier</title>
+  <meta name="description" content="AI-powered waste classification for all 31 Karnataka districts. Snap a photo, get instant disposal guidance in Kannada, English & Hindi." />
+  <meta name="theme-color" content="#0a0f1c" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Kannada:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ───── Navbar ───── -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <span class="brand-icon">♻️</span>
+        <span class="brand-text">Waste<span class="brand-accent">Smart</span></span>
+      </div>
+      <div class="nav-controls">
+        <div id="langSwitcher" class="lang-switcher">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="kn">ಕನ್ನಡ</button>
+          <button class="lang-btn" data-lang="hi">हिंदी</button>
+        </div>
+        <div id="pointsBadge" class="points-badge hidden">
+          <span class="points-icon">⭐</span>
+          <span id="totalPoints" class="points-count">0</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ───── Hero Section ───── -->
+  <header id="hero">
+    <div class="hero-bg-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span>🇮🇳</span>
+        <span data-i18n="hero_badge">Karnataka · 31 Districts</span>
+      </div>
+      <h1 class="hero-title" data-i18n="hero_title">
+        Snap. Classify.<br/><span class="gradient-text">Save the Planet.</span>
+      </h1>
+      <p class="hero-subtitle" data-i18n="hero_subtitle">
+        AI-powered waste classification with disposal guidance in Kannada, English & Hindi
+      </p>
+      <button id="heroScanBtn" class="btn btn-primary btn-glow" onclick="scrollToUpload()">
+        <span class="btn-icon">📸</span>
+        <span data-i18n="hero_cta">Scan Your Waste</span>
+      </button>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-value">20+</span>
+          <span class="stat-label" data-i18n="stat_categories">Waste Types</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-value">31</span>
+          <span class="stat-label" data-i18n="stat_districts">Districts</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-value">3</span>
+          <span class="stat-label" data-i18n="stat_languages">Languages</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ───── Upload Section ───── -->
+  <main id="uploadSection">
+    <div class="section-container">
+      <h2 class="section-title" data-i18n="upload_title">
+        <span class="section-icon">🔍</span> Identify Your Waste
+      </h2>
+
+      <!-- District Selector -->
+      <div class="district-selector">
+        <label for="districtSelect" class="select-label" data-i18n="district_label">Select your district</label>
+        <div class="select-wrapper">
+          <select id="districtSelect">
+            <option value="" data-i18n="district_placeholder">Loading districts...</option>
+          </select>
+          <span class="select-arrow">▾</span>
+        </div>
+      </div>
+
+      <!-- Upload Zone -->
+      <div id="uploadZone" class="upload-zone" tabindex="0" role="button" aria-label="Upload waste image">
+        <div id="uploadPlaceholder" class="upload-placeholder">
+          <div class="upload-icon-ring">
+            <span class="upload-icon">📷</span>
+          </div>
+          <p class="upload-text" data-i18n="upload_text">Tap to take a photo or upload image</p>
+          <p class="upload-hint" data-i18n="upload_hint">Supports JPG, PNG, WebP · Max 10MB</p>
+        </div>
+        <div id="uploadPreview" class="upload-preview hidden">
+          <img id="previewImg" src="" alt="Waste preview" />
+          <button id="removeImageBtn" class="remove-img-btn" aria-label="Remove image">✕</button>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" capture="environment" hidden />
+      </div>
+
+      <!-- Analyze Button -->
+      <button id="analyzeBtn" class="btn btn-primary btn-analyze" disabled>
+        <span class="btn-icon">🧠</span>
+        <span data-i18n="analyze_btn">Analyze with AI</span>
+      </button>
+
+      <!-- Loading Overlay -->
+      <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring"></div>
+        </div>
+        <p class="loading-text" data-i18n="loading_text">Analyzing waste...</p>
+        <p class="loading-sub" data-i18n="loading_sub">Our AI is classifying your waste item</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ───── Results Section ───── -->
+  <section id="resultsSection" class="results-section hidden">
+    <div class="section-container">
+      <!-- Demo Mode Badge -->
+      <div id="demoBadge" class="demo-badge hidden">
+        <span>🧪</span>
+        <span data-i18n="demo_mode">Demo Mode — Add GEMINI_API_KEY for real AI analysis</span>
+      </div>
+
+      <!-- Result Header -->
+      <div id="resultHeader" class="result-header">
+        <div class="result-icon-large" id="resultIcon">🧴</div>
+        <div class="result-meta">
+          <h3 id="resultType" class="result-type">Plastic</h3>
+          <p id="resultSubtype" class="result-subtype">PET Bottle</p>
+          <div class="confidence-bar">
+            <div id="confidenceBar" class="confidence-fill" style="width: 0%"></div>
+          </div>
+          <span id="confidenceLabel" class="confidence-label">0% confidence</span>
+        </div>
+      </div>
+
+      <!-- Bin Card -->
+      <div id="binCard" class="bin-card">
+        <div class="bin-visual">
+          <div id="binIcon" class="bin-icon-circle">🗑️</div>
+          <p id="binLabel" class="bin-name">Dry Waste</p>
+        </div>
+        <p id="disposalMethod" class="disposal-text"></p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-icon">♻️</div>
+          <div class="stat-card-value" id="recyclabilityScore">0/5</div>
+          <div class="stat-card-label" data-i18n="recyclability">Recyclability</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">🌱</div>
+          <div class="stat-card-value" id="compostableLabel">No</div>
+          <div class="stat-card-label" data-i18n="compostable">Compostable</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">🔄</div>
+          <div class="stat-card-value" id="reuseScore">0/5</div>
+          <div class="stat-card-label" data-i18n="reuse_potential">Reuse</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">⏳</div>
+          <div class="stat-card-value" id="decompositionTime">—</div>
+          <div class="stat-card-label" data-i18n="decomposition">Decompose</div>
+        </div>
+      </div>
+
+      <!-- Sustainability Score -->
+      <div class="sustainability-card">
+        <h4 data-i18n="sustainability_title">🌍 Sustainability Score</h4>
+        <div class="sustainability-ring-wrapper">
+          <svg class="sustainability-ring" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="52" class="ring-bg" />
+            <circle cx="60" cy="60" r="52" class="ring-fill" id="sustainabilityRing"
+              stroke-dasharray="326.73"
+              stroke-dashoffset="326.73" />
+          </svg>
+          <div class="ring-value" id="sustainabilityValue">0</div>
+        </div>
+        <p id="sustainabilityLabel" class="sustainability-label"></p>
+      </div>
+
+      <!-- Sell Suggestion -->
+      <div id="sellCard" class="sell-card hidden">
+        <div class="sell-header">
+          <span class="sell-icon">💰</span>
+          <h4 data-i18n="sell_title">Sell & Earn</h4>
+        </div>
+        <p id="sellSuggestion" class="sell-text"></p>
+      </div>
+
+      <!-- Description -->
+      <div class="description-card">
+        <h4 data-i18n="description_title">📝 Description</h4>
+        <p id="descriptionText" class="description-text"></p>
+      </div>
+
+      <!-- District Info -->
+      <div id="districtInfoCard" class="district-info-card hidden">
+        <h4 data-i18n="district_info_title">📍 Your District Info</h4>
+        <div class="district-detail">
+          <span class="detail-icon">📅</span>
+          <div>
+            <span class="detail-label" data-i18n="collection_schedule">Collection Schedule</span>
+            <p id="districtSchedule" class="detail-value"></p>
+          </div>
+        </div>
+        <div class="district-detail">
+          <span class="detail-icon">📍</span>
+          <div>
+            <span class="detail-label" data-i18n="dropoff_center">Drop-off Center</span>
+            <p id="districtDropoff" class="detail-value"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Eco Tips -->
+      <div class="eco-tips-card">
+        <h4 data-i18n="eco_tips_title">🌿 Eco Tips</h4>
+        <ul id="ecoTipsList" class="eco-tips-list"></ul>
+      </div>
+
+      <!-- Points Earned -->
+      <div id="pointsEarnedCard" class="points-earned-card">
+        <div class="points-earned-inner">
+          <span class="points-earned-icon">🎉</span>
+          <span class="points-earned-text">+<span id="pointsEarned">10</span> <span data-i18n="points_earned">points earned!</span></span>
+        </div>
+      </div>
+
+      <!-- Scan Again -->
+      <button id="scanAgainBtn" class="btn btn-secondary" onclick="resetApp()">
+        <span class="btn-icon">🔄</span>
+        <span data-i18n="scan_again">Scan Another Item</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ───── Footer ───── -->
+  <footer id="footer">
+    <div class="footer-inner">
+      <p class="footer-text">
+        <span>♻️</span> Waste<span class="brand-accent">Smart</span> Karnataka
+      </p>
+      <p class="footer-sub" data-i18n="footer_sub">AI-powered waste management for a cleaner Karnataka</p>
+      <p class="footer-copy">© 2026 WasteSmart · <span data-i18n="footer_made">Made with 💚 for Karnataka</span></p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

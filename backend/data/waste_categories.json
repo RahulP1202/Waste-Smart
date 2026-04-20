@@ -1,0 +1,24 @@
+{
+  "categories": [
+    {"id":"plastic-pet","type":"Plastic","subtype":"PET Bottle","bin":"dry","decomposition":"450 years","recyclability":4,"compostable":false,"reuse":3,"can_sell":true,"sell_price":"₹5-10/kg","icon":"🧴"},
+    {"id":"plastic-hdpe","type":"Plastic","subtype":"HDPE Container","bin":"dry","decomposition":"500 years","recyclability":4,"compostable":false,"reuse":3,"can_sell":true,"sell_price":"₹8-12/kg","icon":"🪣"},
+    {"id":"plastic-ldpe","type":"Plastic","subtype":"LDPE Bag/Film","bin":"dry","decomposition":"500 years","recyclability":2,"compostable":false,"reuse":1,"can_sell":false,"sell_price":"","icon":"🛍️"},
+    {"id":"plastic-pp","type":"Plastic","subtype":"Polypropylene","bin":"dry","decomposition":"400 years","recyclability":3,"compostable":false,"reuse":2,"can_sell":true,"sell_price":"₹6-10/kg","icon":"📦"},
+    {"id":"glass-bottle","type":"Glass","subtype":"Glass Bottle","bin":"dry","decomposition":"1 million years","recyclability":5,"compostable":false,"reuse":5,"can_sell":true,"sell_price":"₹2-5/piece","icon":"🍾"},
+    {"id":"glass-broken","type":"Glass","subtype":"Broken Glass","bin":"hazardous","decomposition":"1 million years","recyclability":3,"compostable":false,"reuse":0,"can_sell":false,"sell_price":"","icon":"💔"},
+    {"id":"metal-aluminum","type":"Metal","subtype":"Aluminum Can","bin":"dry","decomposition":"200 years","recyclability":5,"compostable":false,"reuse":4,"can_sell":true,"sell_price":"₹80-120/kg","icon":"🥫"},
+    {"id":"metal-steel","type":"Metal","subtype":"Steel/Iron","bin":"dry","decomposition":"100 years","recyclability":5,"compostable":false,"reuse":4,"can_sell":true,"sell_price":"₹20-30/kg","icon":"⚙️"},
+    {"id":"paper-newspaper","type":"Paper","subtype":"Newspaper","bin":"dry","decomposition":"6 weeks","recyclability":5,"compostable":true,"reuse":3,"can_sell":true,"sell_price":"₹12-15/kg","icon":"📰"},
+    {"id":"paper-cardboard","type":"Paper","subtype":"Cardboard","bin":"dry","decomposition":"2 months","recyclability":5,"compostable":true,"reuse":3,"can_sell":true,"sell_price":"₹8-12/kg","icon":"📦"},
+    {"id":"organic-food","type":"Organic","subtype":"Food Waste","bin":"wet","decomposition":"1-6 months","recyclability":0,"compostable":true,"reuse":0,"can_sell":false,"sell_price":"","icon":"🍌"},
+    {"id":"organic-garden","type":"Organic","subtype":"Garden Waste","bin":"wet","decomposition":"1-3 months","recyclability":0,"compostable":true,"reuse":1,"can_sell":false,"sell_price":"","icon":"🌿"},
+    {"id":"ewaste-phone","type":"E-Waste","subtype":"Mobile Phone","bin":"hazardous","decomposition":"1000+ years","recyclability":3,"compostable":false,"reuse":2,"can_sell":true,"sell_price":"₹50-500/piece","icon":"📱"},
+    {"id":"ewaste-battery","type":"E-Waste","subtype":"Battery","bin":"hazardous","decomposition":"100 years","recyclability":2,"compostable":false,"reuse":0,"can_sell":true,"sell_price":"₹10-50/kg","icon":"🔋"},
+    {"id":"ewaste-wire","type":"E-Waste","subtype":"Wires/Cables","bin":"hazardous","decomposition":"500+ years","recyclability":3,"compostable":false,"reuse":2,"can_sell":true,"sell_price":"₹30-80/kg","icon":"🔌"},
+    {"id":"cloth-cotton","type":"Cloth","subtype":"Cotton Fabric","bin":"dry","decomposition":"5 months","recyclability":3,"compostable":true,"reuse":4,"can_sell":true,"sell_price":"₹5-15/kg","icon":"👕"},
+    {"id":"cloth-synthetic","type":"Cloth","subtype":"Synthetic Fabric","bin":"dry","decomposition":"200 years","recyclability":1,"compostable":false,"reuse":2,"can_sell":true,"sell_price":"₹3-8/kg","icon":"🧥"},
+    {"id":"rubber-tire","type":"Rubber","subtype":"Tire/Rubber","bin":"hazardous","decomposition":"80 years","recyclability":2,"compostable":false,"reuse":2,"can_sell":true,"sell_price":"₹5-10/kg","icon":"🛞"},
+    {"id":"medical-syringe","type":"Medical","subtype":"Syringe/Needle","bin":"hazardous","decomposition":"100+ years","recyclability":0,"compostable":false,"reuse":0,"can_sell":false,"sell_price":"","icon":"💉"},
+    {"id":"sanitary","type":"Sanitary","subtype":"Diaper/Napkin","bin":"hazardous","decomposition":"500 years","recyclability":0,"compostable":false,"reuse":0,"can_sell":false,"sell_price":"","icon":"🧷"}
+  ]
+}
